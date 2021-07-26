@@ -1,3 +1,3 @@
 # 2021 CTF 
 
-- [WEB] IJCTF
+- IJCTF
