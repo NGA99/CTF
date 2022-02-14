@@ -17,7 +17,7 @@ URL: https://knock-knock.mc.ax/
 
 또한 문제 사이트의 소스코드가 제공이 되어 각각의 기능들을 파악하기 수월했다.
 
-```
+```javascript
 class Database {
   constructor() {
     this.notes = [];
@@ -67,7 +67,7 @@ flag가 포함된 글의 id값은 createNote 함수의 `const id = this.notes.le
 
 this.secret 값을 파악하기 위해 this.secret에 사용된 crypto.randomUUID 값을 보았다.
 
-```
+```javascript
 > crypto.randomUUID
 [Function: randomUUID]
 
@@ -79,7 +79,7 @@ this.secret 값을 파악하기 위해 this.secret에 사용된 crypto.randomUUI
 예상과는 다르게 crypto.randomUUID는 string type이 아닌 function type을 가지고 있었고 toString의 결과값은 함수의 내용을 출력하고 있었다.
 따라서 \`secret-${crypto.randomUUID}\` 값은 random한 UUID값이 아닌 유추가능하고 일정한 값임을 알 수 있었다.
 
-```
+```javascript
 > `secret-${crypto.randomUUID}`
 'secret-function randomUUID(options) {\n' +
   '  if (options !== undefined)\n' +
@@ -93,7 +93,7 @@ this.secret 값을 파악하기 위해 this.secret에 사용된 crypto.randomUUI
 
 서버와 동일한 버전의 nodejs에서 사용해야 한다.
 
-```
+```javascript
 const request = require('request');
 const crypto = require('crypto');
 uri = "https://knock-knock.mc.ax/"
