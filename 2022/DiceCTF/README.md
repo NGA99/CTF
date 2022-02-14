@@ -12,7 +12,7 @@ URL: https://knock-knock.mc.ax/
 
 (356 solves/107 points)
 
-#### Analyse
+### Analyse
 문제에서 제공된 사이트에서 글쓰기, 읽기 기능을 확인할 수 있었다.
 
 또한 문제 사이트의 소스코드가 제공이 되어 각각의 기능들을 파악하기 수월했다.
@@ -63,7 +63,7 @@ token을 생성하는 함수는 **generateToken** 함수이며 **this.secret** �
 flag가 포함된 글의 id값은 createNote 함수의 `const id = this.notes.length;` 코드로 생성되기에 0의 값을 가지는걸 알 수 있다.
 
 
-#### Find out the secret value
+### Find out the secret value
 
 this.secret 값을 파악하기 위해 this.secret에 사용된 crypto.randomUUID 값을 보았다.
 
@@ -89,7 +89,7 @@ this.secret 값을 파악하기 위해 this.secret에 사용된 crypto.randomUUI
   '  } = { ...options };\n' +
 ```
 
-#### Generate flag token and read flag
+### Generate flag token and read flag
 
 서버와 동일한 버전의 nodejs에서 사용해야 한다.
 
