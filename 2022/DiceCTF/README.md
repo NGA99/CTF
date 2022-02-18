@@ -117,7 +117,9 @@ AdminBot: https://admin-bot.mc.ax/no-cookies
 
 ### Analyse
 adminbot이 제공되는걸 보아 XSS 문제임을 직감했다.
+
 웹 서비스의 기능으론 register, login, create note, view note 가 있었고 
+
 문제 이름처럼 사용자 검증에 cookie를 사용하지 않으며 각각의 기능들을 사용할 때 마다 사용자를 검증하였다.
 
 ##### index.js
@@ -168,6 +170,7 @@ app.post('/view', (req, res) => {
 ```
 
 create url는 사용자를 검증한 후 POST method로 전달받은 note, mode값을 database notes table에 저장시킨다.
+
 저장하기 전 XSS를 방지하기 위해 note값에서 "<", ">"의 문자를 제거한다.
 
 view url는 사용자를 검증한 후 note를 식별하는 id값을 POST method로 전달받아 database notes table에서 note 정보를 받아오게 된다.
@@ -307,10 +310,13 @@ export default {
 };
 ```
 adminbot은 문제 사이트에 접속해 로그인을 하고 3초 후 사용자가 제공한 문제 사이트의 url에 접속해 로그인을 한다.
+
 로그인에 사용되는 **password에 flag**가 존재하므로 password를 알아내면 문제를 해결할 수 있다.
 
 ### make XSS
+
 note를 생성할 때 note text값에는 "<",">"가 제거가 되어 mode가 plain일 때 XSS가 발생할 수 지만 mode가 markdown일 때는 text값이 가공되어 XSS가 발생할 수 있다.
+
 ``` javascript
       let text = note;
       if (mode === 'markdown') {
@@ -331,6 +337,7 @@ note를 생성할 때 note text값에는 "<",">"가 제거가 되어 mode가 pla
       document.querySelector('.note').innerHTML = text;
 ```
 위 코드에서 첫번째 replace문을 만족시키는 text값은 "\[x\]\(y\)"의 형식이 되고 이 text 값은 '<a href="y">x</a>' 처럼 가공되어 진다.
+
 text에 x, y값에 Double Quote가 삽입되어 질 수 있어 
 ''\[hi\]\(" onfocus=alert(1) autofocus="\)' => '<a href="" onfocus=alert(1) autofocus="">x</a>'
 처럼 a tag 내에 attribute를 조작해 XSS를 발생시킬 수 있다.
@@ -361,11 +368,13 @@ username -> password { if mode markdown -> a tag -> h1 tag -> strong tag -> em t
 ```
 
 RegExp.input값이 password값으로 설정되기 위해선 markdown mode에서 matching이 되지 않아야 한다.
+
 하지만 XSS를 발생시키기 위해선 markdown과 matching이 되어야 한다는 모순이 발생하게 된다...
 
 ### XSS with SQL Injection 
 
 adminbot의 password 값을 알아내기 위해선 위에서 사용된 XSS가 아닌 다른 XSS가 필요한걸 알게 되었다.
+
 index.js를 살펴보다 database 기능에서 사용하는 prepare function에서 취약점을 찾게 되었다.
 
 #### index.js
@@ -394,6 +403,7 @@ const db = {
 };
 ```
 prepare function는 params라는 object를 받아 key와 value값으로 나눠 순차적으로 query에 존재하는 :key 값을 value로 치환시킨다.
+
 여기서 value값에 "'" 필터링은 존재하나 ":"문자에 대한 필터링이 없어 ":" + 다음 key값으로 value를 주게되면 SQL Injection이 가능해 진다.
 
 create url의 insert 문에서 SQL Injection을 발생시킬 수 있으며 아래와 같은 과정으로 발생한다.
