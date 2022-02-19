@@ -111,8 +111,11 @@ request.get(options, function (error, response, body) {
 
 ## [WEB] no-cookies
 I found a more secure way to authenticate users. No cookies, no problems!
+
 URL: instancer.mc.ax/no-cookies
+
 AdminBot: https://admin-bot.mc.ax/no-cookies
+
 (5 solves/415 points)
 
 ### Analyse
