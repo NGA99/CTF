@@ -7,3 +7,4 @@
 # 2022 CTF
 
 - DiceCTF
+- WeCTF
